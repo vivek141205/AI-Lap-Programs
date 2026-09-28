@@ -59,6 +59,19 @@ def solve_dfs(start_state, max_depth=20):
     visited = set()
     return dfs_recursive(start_state, [], visited, max_depth)
 
+# -------------------------------------------------------------
+# NEW: Iterative Deepening Search (IDS)
+# -------------------------------------------------------------
+def solve_ids(start_state, max_depth=20):
+    """Loop depth from 0 to max_depth and run DFS at each level."""
+    for depth in range(max_depth + 1):
+        visited = set()
+        result = dfs_recursive(start_state, [], visited, depth)
+        if result is not None:
+            return result, depth  # Return path and the depth where it was found
+    return None, max_depth
+
+
 if __name__ == "__main__":
     initial_state = (
         (1, 2, 3),
@@ -66,11 +79,18 @@ if __name__ == "__main__":
         (7, 5, 8)
     )
 
-    print("Searching for solution using DFS...")
-    solution_path = solve_dfs(initial_state, max_depth=15)
-
-    if solution_path is not None:
-        print(f"\nSolution Found in {len(solution_path)} moves!")
-        print("Move Sequence:", " -> ".join(solution_path))
+    print("=== 1. DFS Search ===")
+    dfs_path = solve_dfs(initial_state, max_depth=15)
+    if dfs_path is not None:
+        print(f"Solution Found in {len(dfs_path)} moves!")
+        print("Move Sequence:", " -> ".join(dfs_path))
     else:
-        print("\nNo solution found within the specified depth limit.")
+        print("No solution found within the specified depth limit.")
+
+    print("\n=== 2. IDS Search ===")
+    ids_path, depth_found = solve_ids(initial_state, max_depth=15)
+    if ids_path is not None:
+        print(f"Optimal Solution Found at Depth {depth_found} in {len(ids_path)} moves!")
+        print("Move Sequence:", " -> ".join(ids_path))
+    else:
+        print("No solution found within the specified depth limit.")
